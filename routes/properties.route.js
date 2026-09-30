@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { verifyToken } from "../lib/verifyToken.js";
 import { verifyTenant } from "../lib/verifyUserRole.js";
+import { favoritesCollection, propertiesCollection } from "../lib/databaseCollections.js";
 
 const propertiesRouter = Router()
 
