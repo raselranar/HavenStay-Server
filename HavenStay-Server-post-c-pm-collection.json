@@ -1,0 +1,619 @@
+{
+  "info": {
+    "name": "HavenStay Server API",
+    "description": "Postman collection for the HavenStay backend API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tenantId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ownerId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "propertyId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "favoriteId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "bookingId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response contains server status', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.have.property('status', true);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Properties",
+      "item": [
+        {
+          "name": "GET /api/properties",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is an array', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/properties?search=&type=&sort=price_asc&minPrice=&maxPrice=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "properties"
+              ],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "type", "value": "" },
+                { "key": "sort", "value": "price_asc" },
+                { "key": "minPrice", "value": "" },
+                { "key": "maxPrice", "value": "" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/properties/featured",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/properties/featured"
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/properties/recent",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/properties/recent"
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/properties/details/:id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/properties/details/{{propertyId}}?userId={{tenantId}}"
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/properties/reviews",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"propertyId\": \"{{propertyId}}\",\n  \"rating\": 5,\n  \"comment\": \"Great stay and very clean property.\"\n}"
+            },
+            "url": "{{baseUrl}}/api/properties/reviews"
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/properties/tenant-analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/properties/tenant-analytics"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Favorites",
+      "item": [
+        {
+          "name": "POST /api/properties/favorites",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{tenantId}}\",\n  \"propertyId\": \"{{propertyId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/properties/favorites"
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/properties/favorites",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/properties/favorites?userId={{tenantId}}"
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/properties/favorites",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"_id\": \"{{favoriteId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/properties/favorites"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "POST /api/properties/bookings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{tenantId}}\",\n  \"propertyId\": \"{{propertyId}}\",\n  \"rent\": 1200,\n  \"bookingStatus\": \"pending\"\n}"
+            },
+            "url": "{{baseUrl}}/api/properties/bookings"
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/properties/bookings (tenant)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/properties/bookings"
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/properties/bookings (owner)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/properties/bookings?stripId={{bookingId}}"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Owner",
+      "item": [
+        {
+          "name": "POST /api/owner/properties",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Sample Property\",\n  \"location\": \"Dhaka\",\n  \"propertyType\": \"Apartment\",\n  \"rent\": 2500,\n  \"status\": \"pending\",\n  \"ownerInfo\": {\n    \"ownerId\": \"{{ownerId}}\",\n    \"name\": \"Owner Name\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/api/owner/properties"
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/owner/properties/:ownerId",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/owner/properties/{{ownerId}}"
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/owner/bookings/:ownerId",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/owner/bookings/{{ownerId}}"
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/owner/bookings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{bookingId}}\",\n  \"bookingStatus\": \"confirmed\"\n}"
+            },
+            "url": "{{baseUrl}}/api/owner/bookings"
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/owner/properties/:id",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Property Title\",\n  \"rent\": 2800\n}"
+            },
+            "url": "{{baseUrl}}/api/owner/properties/{{propertyId}}"
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/owner/properties",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{propertyId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/owner/properties"
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/owner/analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/owner/analytics"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "GET /api/admin/users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/admin/users"
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /api/admin/users/:userId/role",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"owner\"\n}"
+            },
+            "url": "{{baseUrl}}/api/admin/users/{{userId}}/role"
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/admin/properties"
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /api/admin/properties/:propertyId/status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"approved\",\n  \"rejectionFeedback\": \"\"\n}"
+            },
+            "url": "{{baseUrl}}/api/admin/properties/{{propertyId}}/status"
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/admin/properties/:propertyId",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Approved Property\",\n  \"status\": \"approved\"\n}"
+            },
+            "url": "{{baseUrl}}/api/admin/properties/{{propertyId}}"
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/admin/properties/:propertyId",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/admin/properties/{{propertyId}}"
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/transactions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/admin/transactions"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

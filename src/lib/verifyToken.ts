@@ -1,14 +1,18 @@
 import * as jose from "jose";
 import "dotenv/config";
+import type { NextFunction, Request, Response } from "express";
 
 export const JWKS = jose.createRemoteJWKSet(
   new URL(`${process.env.CLIENT_URL}/api/auth/jwks`),
 );
 
-
-export const verifyToken = async (req, res, next) => {
+export const verifyToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const authHeader = req.headers.authorization;
-   
+
   if (!authHeader) {
     return res.status(401).send({ message: "Unauthorized" });
   }

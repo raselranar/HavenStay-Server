@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-const client = new MongoClient(process.env.MONGODB_URI, {
+const client = new MongoClient(process.env.MONGODB_URI as string, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -15,4 +15,9 @@ const favoritesCollection = database.collection("favorites");
 const bookingCollection = database.collection("bookings");
 const usersCollection = database.collection("user");
 
-export {propertiesCollection, favoritesCollection, bookingCollection, usersCollection}
+export {
+  propertiesCollection,
+  favoritesCollection,
+  bookingCollection,
+  usersCollection,
+};
