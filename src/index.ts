@@ -93,41 +93,6 @@ async function run() {
         res.send({ review });
       },
     );
-
-    // get analytics data
-    app.get(
-      "/api/properties/tenant-analytics",
-      verifyToken,
-      verifyTenant,
-      async (req: Request, res: Response) => {
-        const { userId } = req.body?.session;
-        if (!userId) {
-          return res.status(400).send({ message: "Missing userId" });
-        }
-        const totalBookings = bookingCollection.countDocuments({
-          userId: userId,
-        });
-        const totalFavorites = favoritesCollection.countDocuments({
-          userId: userId,
-        });
-        const totalActiveRentals = bookingCollection.countDocuments({
-          userId: userId,
-          bookingStatus: "confirmed",
-        });
-        const [bookingsCount, favoritesCount, activeRentalsCount] =
-          await Promise.all([
-            totalBookings,
-            totalFavorites,
-            totalActiveRentals,
-          ]);
-
-        res.send({
-          bookingsCount,
-          favoritesCount,
-          activeRentalsCount,
-        });
-      },
-    );
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();

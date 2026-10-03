@@ -25,17 +25,17 @@ bookingRoute.post(
   },
 );
 
-// get bookings
+// get booking by
 bookingRoute.get(
-  "/bookings",
+  "/bookings/tenant",
   verifyToken,
   verifyTenant,
   async (req: Request, res: Response) => {
     const query: { transactionId?: string; userId?: string } = {};
-    const { userId } = req.body.session;
-    const transactionId = req.body.transactionId;
+    const userId = req.user?.id;
+    // const transactionId = req.body.transactionId;
     // index;
-    if (transactionId) query.transactionId = transactionId;
+    // if (transactionId) query.transactionId = transactionId;
 
     if (!userId) {
       return res.status(400).send({ message: "Missing userId" });
